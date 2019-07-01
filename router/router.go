@@ -38,7 +38,10 @@ func InitRouter() {
 	v1Group.Use(authHandler.Authenticate)
 
 	userHandler := new(handler.UserHandler)
-	v1Group.GET("/users", userHandler.GetList)
+	userGroup := v1Group.Group("/user")
+	userGroup.GET("/list", userHandler.GetList)
+	userGroup.POST("/update/:id", userHandler.Update)
+	userGroup.POST("/delete/:id", userHandler.Delete)
 
 	// Start server
 	go func() {
