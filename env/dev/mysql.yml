@@ -1,0 +1,5 @@
+username: root
+password: root
+database_name: schedule_management
+max_idle_conn: 10
+max_open_conn: 10
