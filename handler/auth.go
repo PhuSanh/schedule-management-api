@@ -14,8 +14,9 @@ type AuthHandler struct {
 
 func (a AuthHandler) Login(c echo.Context) (err error) {
 	var body model.LoginForm
+
 	if err = c.Bind(&body); err != nil {
-		return RespondToClient(c, 200, "Login request params wrong", err)
+		return RespondToClient(c, common.ERROR_REQUEST_DATA_INVALID, common.MSG_REQUEST_DATA_INVALID, err)
 	}
 
 	user := new(model.User)
@@ -23,15 +24,11 @@ func (a AuthHandler) Login(c echo.Context) (err error) {
 	_ = a.userRepo.GetUserLogin(user, body)
 
 	if user.ID == 0 {
-		return RespondToClient(c, 200, "Username not found", nil)
+		return RespondToClient(c, common.ERROR_GET_ROW_FROM_DB, common.MSG_GET_ROW_FROM_DB, err)
 	}
 
 	if ok := common.CheckPasswordHash(body.Password, user.Password); ok == false {
-		return RespondToClient(c, 200, "User and Password not match", nil)
-	}
-
-	if err != nil {
-		return RespondToClient(c, 200, "Login request params wrong", err)
+		return RespondToClient(c, common.ERROR_CHECK_PASSWORD, common.MSG_USERNAME_PASSWORD_NOT_MATCH, nil)
 	}
 
 	authClaims := &model.AuthClaims{
@@ -44,7 +41,7 @@ func (a AuthHandler) Login(c echo.Context) (err error) {
 		Token: tokenString,
 		Username: body.Username,
 	}
-	return RespondToClient(c, 200, "Get token success", auth)
+	return RespondToClient(c, common.ERROR_NO_ERORR, common.MSG_SUCEESS, auth)
 }
 
 func (a AuthHandler) Check(c echo.Context) (err error) {
@@ -56,7 +53,7 @@ func (a AuthHandler) Check(c echo.Context) (err error) {
 func (a AuthHandler) Register(c echo.Context) (err error) {
 	body := new(model.RegisterForm)
 	if err = c.Bind(&body); err != nil {
-		return RespondToClient(c, 200, "Register request params wrong", err)
+		return RespondToClient(c, common.ERROR_REQUEST_DATA_INVALID, common.MSG_REQUEST_DATA_INVALID, err)
 	}
 
 	hashedPass, _ := common.HashPassword(body.Password)
@@ -66,16 +63,16 @@ func (a AuthHandler) Register(c echo.Context) (err error) {
 	}
 	err = a.userRepo.CreateUser(user)
 	if err != nil {
-		return RespondToClient(c, 200, "Register user fail", err)
+		return RespondToClient(c, common.ERROR_INSERT_ROW_TO_DB, common.MSG_INSERT_ROW_TO_DB, err)
 	}
-	return RespondToClient(c, 200, "Register user success", user)
+	return RespondToClient(c, common.ERROR_NO_ERORR, common.MSG_SUCEESS, user)
 }
 
 func (a AuthHandler) Authenticate(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Request().Header.Get("Authorization")
 		if _, err := a.validateToken(token); err != "" {
-			return RespondToClient(c, 200, "unauthorized", nil)
+			return RespondToClient(c, common.ERROR_UNAUTHORIZED, common.MSG_UNAUTHORIZED, err)
 		}
 		return next(c)
 	}

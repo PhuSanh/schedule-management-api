@@ -10,6 +10,8 @@ const (
 	ERROR_DELETE_ROW_IN_DB          = 5
 	ERROR_UPDATE_ROW_IN_DB          = 6
 	ERROR_REQUEST_PARAMETER_INVALID = 7
+	ERROR_CHECK_PASSWORD			= 8
+	ERROR_UNAUTHORIZED				= 9
 
 	MSG_SUCEESS                   = "success"
 	MSG_GET_ROW_FROM_DB           = "get data from db error"
@@ -20,6 +22,8 @@ const (
 	MSG_REQUEST_DATA_INVALID      = "request data invalid"
 	MSG_REQUEST_PARAMETER_INVALID = "invalid parameter"
 	MSG_NOT_EXIST                 = "not exist"
+	MSG_USERNAME_PASSWORD_NOT_MATCH = "username and password not match"
+	MSG_UNAUTHORIZED			  = "unauthorized"
 
 	//paging
 

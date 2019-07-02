@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"schedule-management-api/database"
 	"schedule-management-api/model"
 )
