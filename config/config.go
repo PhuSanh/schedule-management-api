@@ -14,7 +14,7 @@ type Config struct {
 	ApiVersion string `mapstructure:"api_version"`
 	Debug 	bool
 	Mysql 	*Mysql
-	//Redis 	*Redis
+	Redis 	*Redis
 }
 
 var config *Config
@@ -40,7 +40,7 @@ func init() {
 	config = new(Config)
 	fetchDataToConfig(path, "base", config)
 	fetchDataToConfig(path, "mysql", &(config.Mysql))
-	//fetchDataToConfig(path, "redis", &(config.Redis))
+	fetchDataToConfig(path, "redis", &(config.Redis))
 }
 
 func fetchDataToConfig(configPath string, configName string, result interface{}) {

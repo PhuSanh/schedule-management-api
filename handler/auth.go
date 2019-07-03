@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"schedule-management-api/common"
@@ -14,7 +15,6 @@ type AuthHandler struct {
 
 func (a AuthHandler) Login(c echo.Context) (err error) {
 	var body model.LoginForm
-
 	if err = c.Bind(&body); err != nil {
 		return RespondToClient(c, common.ERROR_REQUEST_DATA_INVALID, common.MSG_REQUEST_DATA_INVALID, err)
 	}

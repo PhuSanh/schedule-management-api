@@ -1,21 +1,30 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/urfave/cli"
 	"schedule-management-api/database"
 	"schedule-management-api/model"
 	"schedule-management-api/setting"
 )
 
+var tables = map[string]interface{} {
+	"user": 			&model.User{},
+	"user-category":	&model.UserCategory{},
+	"schedule": 		&model.Schedule{},
+	"group": 			&model.Group{},
+	"user-group": 		&model.UserGroup{},
+}
+
 func migrateAction(appContext *cli.Context) {
 	input := appContext.String("table")
-	_ = setting.InitMysql()
-	switch input {
-	case "user":
-		database.MysqlConn.AutoMigrate(&model.User{})
-	case "user-category":
-		database.MysqlConn.AutoMigrate(&model.UserCategory{})
+	if _, ok := tables[input]; !ok {
+		fmt.Println("Table " + input + " not found")
+		return
 	}
+	_ = setting.InitMysql()
+	database.MysqlConn.AutoMigrate(tables[input])
+	fmt.Println("Migrate table " + input + " success")
 	defer database.MysqlConn.Stop()
 }
 

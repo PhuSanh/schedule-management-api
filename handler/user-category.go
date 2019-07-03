@@ -20,6 +20,18 @@ func (ch UserCategoryHandler) GetList(c echo.Context) (err error) {
 	return RespondToClient(c, common.ERROR_NO_ERORR, common.MSG_SUCEESS, listUserCategories)
 }
 
+func (ch UserCategoryHandler) Create(c echo.Context) (err error) {
+	userCategory := new(model.UserCategory)
+	if err = c.Bind(&userCategory); err != nil {
+		return RespondToClient(c, common.ERROR_REQUEST_DATA_INVALID, common.MSG_REQUEST_DATA_INVALID, err)
+	}
+	err = ch.repo.CreateUserCategory(userCategory)
+	if err != nil {
+		return RespondToClient(c, common.ERROR_INSERT_ROW_TO_DB, common.MSG_INSERT_ROW_TO_DB, err)
+	}
+	return RespondToClient(c, common.ERROR_NO_ERORR, common.MSG_SUCEESS, userCategory)
+}
+
 func (ch UserCategoryHandler) Update(c echo.Context) (err error) {
 	id := common.ParseParamID(c.Param("id"))
 	userCategory := new(model.UserCategory)

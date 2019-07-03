@@ -8,6 +8,7 @@ require (
 	github.com/coreos/go-systemd v0.0.0-20190620071333-e64a0ec8b42a // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-kit/kit v0.9.0 // indirect
+	github.com/go-redis/redis v6.15.2+incompatible
 	github.com/golang/mock v1.3.1 // indirect
 	github.com/google/pprof v0.0.0-20190515194954-54271f7e092f // indirect
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect

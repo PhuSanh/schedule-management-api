@@ -2,6 +2,7 @@ package common
 
 import (
 	"golang.org/x/crypto/bcrypt"
+	"reflect"
 	"strconv"
 )
 
@@ -18,4 +19,8 @@ func CheckPasswordHash(password, hash string) bool {
 func ParseParamID(id string) (result int64) {
 	result, _ = strconv.ParseInt(id, 10, 64)
 	return
+}
+
+func IsZeroOfUnderlyingType(x interface{}) bool {
+	return x == reflect.Zero(reflect.TypeOf(x)).Interface()
 }
